@@ -7,5 +7,5 @@ edition = "2021"
 
 [dependencies]
 bevy = "0.8"
-
+bevy-inspector-egui = "0.12.1"
 benimator = {git = "https://github.com/jcornaz/benimator.git"}
