@@ -9,3 +9,7 @@ edition = "2021"
 bevy = "0.8"
 bevy-inspector-egui = "0.12.1"
 benimator = {git = "https://github.com/jcornaz/benimator.git"}
+bevy_ecs_tilemap = "0.7"
+iyes_loopless = "0.7"
+
+anyhow = "1.0"

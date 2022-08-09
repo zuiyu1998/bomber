@@ -1,20 +1,32 @@
-use benimator::{Animation, FrameRate, State};
 use bevy::render::camera::OrthographicProjection;
 use bevy::{prelude::*, render::texture::ImageSettings};
-use bevy_inspector_egui::WorldInspectorPlugin;
 
+pub mod consts;
+
+pub mod debug;
+pub mod maps;
 pub mod player;
+pub mod state;
 
+use consts::MONSTER_Z;
+pub use debug::*;
+pub use maps::*;
 pub use player::*;
+pub use state::*;
 
 fn main() {
-    App::new()
-        .insert_resource(ImageSettings::default_nearest())
+    let mut app = App::new();
+
+    app.insert_resource(ImageSettings::default_nearest())
         .add_plugins(DefaultPlugins)
         .add_plugin(MonsterPlugin)
-        .add_plugin(WorldInspectorPlugin::new())
-        .add_startup_system(spawn)
-        .run();
+        .add_plugin(MapPlugin)
+        .add_plugin(StatePlugin);
+
+    #[cfg(debug_assertions)]
+    app.add_plugin(DebugPlugin);
+
+    app.add_startup_system(spawn).run();
 }
 
 fn spawn(
@@ -23,7 +35,7 @@ fn spawn(
     mut textures: ResMut<Assets<TextureAtlas>>,
 ) {
     let projection = OrthographicProjection {
-        scale: 0.1,
+        scale: 0.5,
         ..Default::default()
     };
 
@@ -45,6 +57,10 @@ fn spawn(
             14,
             1,
         )),
+        transform: Transform {
+            translation: Vec3::new(0.0, 0.0, MONSTER_Z),
+            ..Default::default()
+        },
         ..Default::default()
     };
 
