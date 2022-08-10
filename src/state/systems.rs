@@ -1,4 +1,4 @@
-use crate::GameState;
+use crate::{get_word_transform, GameState, TilePhysic};
 use crate::{CurrentAndNextMap, TiledMap};
 use bevy::asset::LoadState;
 use bevy::log;
@@ -8,6 +8,7 @@ use iyes_loopless::state::NextState;
 
 use super::LoadAssets;
 use crate::consts::{MAP_Z, MONSTER_Z};
+use crate::physics::TilePhysicBundle;
 
 //加载资源
 pub fn load_game_resource(
@@ -55,6 +56,10 @@ pub fn spawn_map(
     let texture_handle: Handle<Image> = asset_server.load("wall.png");
 
     let tilemap_size = TilemapSize { x: 15, y: 13 };
+    let tile_size = TilemapTileSize { x: 16.0, y: 16.0 };
+
+    let layer_transform =
+        bevy_ecs_tilemap::helpers::get_centered_transform_2d(&tilemap_size, &tile_size, MAP_Z);
 
     let tilemap_entity = commands.spawn().id();
 
@@ -70,6 +75,18 @@ pub fn spawn_map(
                 y: y as u32,
             };
 
+            let mut tile_physic_entity = None;
+
+            if *index >= 4 {
+                let tile_physic = commands
+                    .spawn_bundle(TilePhysicBundle::new(
+                        get_word_transform(&layer_transform, &tile_pos, &tile_size),
+                        &tile_size,
+                    ))
+                    .id();
+                tile_physic_entity = Some(tile_physic)
+            }
+
             let tile_entity = commands
                 .spawn()
                 .insert_bundle(TileBundle {
@@ -79,11 +96,14 @@ pub fn spawn_map(
                     ..Default::default()
                 })
                 .id();
+
+            if let Some(tile_physic) = tile_physic_entity {
+                commands.entity(tile_entity).insert(TilePhysic(tile_physic));
+            }
+
             tile_storage.set(&tile_pos, Some(tile_entity));
         }
     }
-
-    let tile_size = TilemapTileSize { x: 16.0, y: 16.0 };
 
     commands
         .entity(tilemap_entity)
@@ -93,11 +113,7 @@ pub fn spawn_map(
             storage: tile_storage,
             texture: TilemapTexture(texture_handle),
             tile_size,
-            transform: bevy_ecs_tilemap::helpers::get_centered_transform_2d(
-                &tilemap_size,
-                &tile_size,
-                MAP_Z,
-            ),
+            transform: layer_transform,
             ..Default::default()
         });
 

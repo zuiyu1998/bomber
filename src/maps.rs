@@ -6,6 +6,23 @@ use bevy::{
 
 use bevy_ecs_tilemap::prelude::*;
 
+pub fn get_word_transform(
+    transform: &Transform,
+    tile_pos: &TilePos,
+    tile_size: &TilemapTileSize,
+) -> Transform {
+    let x = transform.translation.x + tile_pos.x as f32 * tile_size.x + 0.5 * tile_size.x;
+    let y = transform.translation.y + tile_pos.y as f32 * tile_size.y + 0.5 * tile_size.y;
+
+    let mut new_transform = transform.clone();
+
+    new_transform.translation = Vec3::new(x, y, transform.translation.y);
+    new_transform
+}
+
+#[derive(Debug, Component)]
+pub struct TilePhysic(pub Entity);
+
 pub struct CurrentAndNextMap {
     pub level: usize,
     pub current: Handle<TiledMap>,

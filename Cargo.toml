@@ -12,4 +12,7 @@ benimator = {git = "https://github.com/jcornaz/benimator.git"}
 bevy_ecs_tilemap = "0.7"
 iyes_loopless = "0.7"
 
+# 物理引擎
+bevy_rapier2d = { version = "0.16", features = [ "simd-stable", "debug-render" ] }
+
 anyhow = "1.0"
