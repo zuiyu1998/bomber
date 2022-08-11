@@ -34,20 +34,6 @@ pub struct PhysicPlugin;
 impl Plugin for PhysicPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
-            .add_plugin(RapierDebugRenderPlugin::default())
-            .add_system(display_events);
-    }
-}
-
-fn display_events(
-    mut collision_events: EventReader<CollisionEvent>,
-    mut contact_force_events: EventReader<ContactForceEvent>,
-) {
-    for collision_event in collision_events.iter() {
-        println!("Received collision event: {:?}", collision_event);
-    }
-
-    for contact_force_event in contact_force_events.iter() {
-        println!("Received contact force event: {:?}", contact_force_event);
+            .add_plugin(RapierDebugRenderPlugin::default());
     }
 }

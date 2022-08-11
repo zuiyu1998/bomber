@@ -82,5 +82,8 @@ fn spawn(
         .insert(RigidBody::Dynamic)
         .insert(Velocity::linear(Vec2::new(0.0, 16.0)))
         .insert(Collider::ball(16.0 / 2.0))
-        .insert(ActiveEvents::COLLISION_EVENTS);
+        .insert(AdditionalMassProperties::MassProperties(MassProperties {
+            principal_inertia: 1000.0,
+            ..Default::default()
+        }));
 }

@@ -1,6 +1,6 @@
 use benimator::{Animation, FrameRate, State};
-
 use bevy::prelude::*;
+use bevy_rapier2d::prelude::*;
 
 pub struct MonsterPlugin;
 
@@ -82,23 +82,27 @@ fn monster_animate(
 
 fn get_player_input(
     keyboard_input: Res<Input<KeyCode>>,
-    mut query: Query<&mut MonsterAnimation, With<Player>>,
+    mut query: Query<(&mut MonsterAnimation, &mut Velocity), With<Player>>,
 ) {
-    let mut animation = query.single_mut();
+    let (mut animation, mut velocity) = query.single_mut();
 
     if keyboard_input.just_pressed(KeyCode::W) {
         *animation = MonsterAnimation::top();
+        *velocity = Velocity::linear(Vec2::new(0.0, 16.0));
     }
 
     if keyboard_input.just_pressed(KeyCode::S) {
         *animation = MonsterAnimation::bottom();
+        *velocity = Velocity::linear(Vec2::new(0.0, -16.0));
     }
     if keyboard_input.just_pressed(KeyCode::A) {
         *animation = MonsterAnimation::left();
+        *velocity = Velocity::linear(Vec2::new(-16.0, 0.0));
     }
 
     if keyboard_input.just_pressed(KeyCode::D) {
         *animation = MonsterAnimation::right();
+        *velocity = Velocity::linear(Vec2::new(16.0, 0.0));
     }
 }
 
