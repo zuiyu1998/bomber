@@ -86,24 +86,26 @@ fn get_player_input(
 ) {
     let (mut animation, mut velocity) = query.single_mut();
 
-    if keyboard_input.just_pressed(KeyCode::W) {
+    let mut new_velocity = Vec2::ZERO;
+
+    if keyboard_input.pressed(KeyCode::W) {
         *animation = MonsterAnimation::top();
-        *velocity = Velocity::linear(Vec2::new(0.0, 16.0));
+        new_velocity = Vec2::new(0.0, 16.0);
     }
-
-    if keyboard_input.just_pressed(KeyCode::S) {
+    if keyboard_input.pressed(KeyCode::S) {
         *animation = MonsterAnimation::bottom();
-        *velocity = Velocity::linear(Vec2::new(0.0, -16.0));
+        new_velocity = Vec2::new(0.0, -16.0);
     }
-    if keyboard_input.just_pressed(KeyCode::A) {
+    if keyboard_input.pressed(KeyCode::A) {
         *animation = MonsterAnimation::left();
-        *velocity = Velocity::linear(Vec2::new(-16.0, 0.0));
-    }
 
-    if keyboard_input.just_pressed(KeyCode::D) {
-        *animation = MonsterAnimation::right();
-        *velocity = Velocity::linear(Vec2::new(16.0, 0.0));
+        new_velocity = Vec2::new(-16.0, 0.0);
     }
+    if keyboard_input.pressed(KeyCode::D) {
+        *animation = MonsterAnimation::right();
+        new_velocity = Vec2::new(16.0, 0.0);
+    }
+    *velocity = Velocity::linear(new_velocity);
 }
 
 impl Plugin for MonsterPlugin {

@@ -80,10 +80,7 @@ fn spawn(
         .spawn_bundle(monster_bundle)
         .insert(Player)
         .insert(RigidBody::Dynamic)
-        .insert(Velocity::linear(Vec2::new(0.0, 16.0)))
         .insert(Collider::ball(16.0 / 2.0))
-        .insert(AdditionalMassProperties::MassProperties(MassProperties {
-            principal_inertia: 1000.0,
-            ..Default::default()
-        }));
+        .insert(LockedAxes::ROTATION_LOCKED)
+        .insert(Velocity::linear(Vec2::ZERO));
 }
