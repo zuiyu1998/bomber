@@ -1,4 +1,4 @@
-use crate::{get_word_transform, GameState, TilePhysic};
+use crate::{get_word_transform, GameState};
 use crate::{CurrentAndNextMap, TiledMap};
 use bevy::asset::LoadState;
 use bevy::log;
@@ -75,18 +75,6 @@ pub fn spawn_map(
                 y: y as u32,
             };
 
-            let mut tile_physic_entity = None;
-
-            if *index >= 4 {
-                let tile_physic = commands
-                    .spawn_bundle(TilePhysicBundle::new(
-                        get_word_transform(&layer_transform, &tile_pos, &tile_size),
-                        &tile_size,
-                    ))
-                    .id();
-                tile_physic_entity = Some(tile_physic)
-            }
-
             let tile_entity = commands
                 .spawn()
                 .insert_bundle(TileBundle {
@@ -97,8 +85,12 @@ pub fn spawn_map(
                 })
                 .id();
 
-            if let Some(tile_physic) = tile_physic_entity {
-                commands.entity(tile_entity).insert(TilePhysic(tile_physic));
+            if *index >= 4 {
+                let new_transrom = get_word_transform(&layer_transform, &tile_pos, &tile_size);
+
+                commands.entity(tile_entity).with_children(|commands| {
+                    commands.spawn_bundle(TilePhysicBundle::new(new_transrom, &tile_size));
+                });
             }
 
             tile_storage.set(&tile_pos, Some(tile_entity));

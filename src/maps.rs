@@ -20,9 +20,6 @@ pub fn get_word_transform(
     new_transform
 }
 
-#[derive(Debug, Component)]
-pub struct TilePhysic(pub Entity);
-
 pub struct CurrentAndNextMap {
     pub level: usize,
     pub current: Handle<TiledMap>,

@@ -13,7 +13,7 @@ pub struct TilePhysicBundle {
 impl TilePhysicBundle {
     pub fn new(local_transform: Transform, tile_size: &TilemapTileSize) -> Self {
         let transform_bundle = TransformBundle {
-            local: local_transform,
+            global: GlobalTransform::from(local_transform),
             ..Default::default()
         };
 

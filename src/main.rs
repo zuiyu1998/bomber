@@ -82,5 +82,6 @@ fn spawn(
         .insert(RigidBody::Dynamic)
         .insert(Collider::ball(16.0 / 2.0))
         .insert(LockedAxes::ROTATION_LOCKED)
-        .insert(Velocity::linear(Vec2::ZERO));
+        .insert(Velocity::linear(Vec2::ZERO))
+        .insert(Name::new("玩家"));
 }
