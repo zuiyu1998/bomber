@@ -4,12 +4,14 @@ use bevy_rapier2d::prelude::*;
 
 pub mod consts;
 
+pub mod animate;
 pub mod debug;
 pub mod maps;
 pub mod physics;
 pub mod player;
 pub mod state;
 
+pub use animate::*;
 use consts::MONSTER_Z;
 pub use debug::*;
 pub use maps::*;
@@ -25,7 +27,8 @@ fn main() {
         .add_plugin(MonsterPlugin)
         .add_plugin(MapPlugin)
         .add_plugin(StatePlugin)
-        .add_plugin(PhysicPlugin);
+        .add_plugin(PhysicPlugin)
+        .add_plugin(SpriteAnimatePlugin);
 
     #[cfg(debug_assertions)]
     app.add_plugin(DebugPlugin);
@@ -49,7 +52,7 @@ fn spawn(
         projection,
         ..Camera2dBundle::default()
     });
-    let animation = MonsterAnimation::bottom();
+    let animation = SpriteAnimation::bottom();
 
     let sprite_sheet_bundle = SpriteSheetBundle {
         sprite: TextureAtlasSprite {
@@ -73,7 +76,7 @@ fn spawn(
     let monster_bundle = MonsterBundle::new(
         sprite_sheet_bundle,
         animation,
-        MonsterAnimationState::default(),
+        SpriteAnimationState::default(),
     );
 
     commands
